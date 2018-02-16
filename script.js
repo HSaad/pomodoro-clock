@@ -34,7 +34,7 @@ function startTimer(duration) {
 			let milisec = offset + (new Date()).getTime() - time.getTime();
 			display.textContent = duration - parseInt(milisec / 1000) 
 
-			
+
 		}
 		//minutes = parseInt(timer, 10)
 		//seconds = parseInt(minutes % 60, 10)
