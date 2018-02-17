@@ -7,6 +7,7 @@ const sessionTime = document.querySelector('.session');
 const breakTime = document.querySelector('.break');
 
 const display = document.querySelector('.time');
+const name = document.querySelector('.name'); //name of the session ('Break' or 'Session')
 
 let isPaused = false;
 let time = new Date();
@@ -34,30 +35,35 @@ reset.addEventListener('click', (e) =>{
 	resetTimer();
 });
 
-//FUNCTION
-
 function startTimer(duration) {
 	let offset = 0;
 	time = new Date();
 	isPaused = false;
-
-	setInterval(function(){
+	let interval = setInterval(function(){
 		if(!isPaused){
 			let milisec = offset + (new Date()).getTime() - time.getTime();
 			secToDisplay(duration - parseInt(milisec / 1000));
+			
+			if(duration - parseInt(milisec / 1000) < 0){
+				switchSession();
+				clearInterval(interval);
+			}
+		}else{
 
-			//if(displayToSec() < 0){
-				//secToDisplay(duration);
-			//}
+			clearInterval(interval);
 		}
 	}, 10);
 }
 
 function stopTimer(){
-	//clearInterval(startTimer);
 	isPaused = true;
 	isPlayClicked = false;
-	secToDisplay(+sessionTime.value * 60); //should be session or breaktime 
+
+	if(name.textContent == "Session"){
+		validSessionTime();
+	}else{
+		validBreakTime();
+	}
 }
 
 function pauseTimer(){
@@ -68,15 +74,31 @@ function pauseTimer(){
 function resetTimer(){
 	isPaused = true;
 	isPlayClicked = false;
-	secToDisplay(+sessionTime.value * 60); //resets timer to session
+	name.textContent = "Session";
+
+	validSessionTime(); //resets timer to session
+	
 }
+
 
 //switches between session timer and break timer
 function switchSession(){
+	if(name.textContent == "Session"){
+		//switch to break
+		name.textContent = "Break";
 
+		validBreakTime(); 
+		
+	}else {
+		//switch to session
+		name.textContent = "Session";
+		validSessionTime();
+		
+	}
+	startTimer(displayToSec());
 }
 
-//turn display time to total seconds in int
+//turn display time to total seconds (int)
 function displayToSec(){
 	let time = (display.textContent).split(":");
 	let minutes = parseInt(time[0]);
@@ -86,7 +108,7 @@ function displayToSec(){
 	return totalSeconds;
 }
 
-//turn total number of seconds into display time
+//turn total number of seconds into display time (minutes : seconds)
 function secToDisplay(totalSeconds){
 	let minutes = Math.floor(totalSeconds / 60);
 	let seconds = totalSeconds % 60;
@@ -95,4 +117,22 @@ function secToDisplay(totalSeconds){
 	seconds = seconds < 10 ? "0" + seconds : seconds;
 
 	display.textContent = minutes + ":" + seconds;
+}
+
+function validSessionTime(){
+	if(+sessionTime.value > 60 || +sessionTime.value < 1){
+		sessionTime.value = 25;
+		secToDisplay(25 * 60);
+	}else{
+		secToDisplay(+sessionTime.value * 60);
+	}
+}
+
+function validBreakTime(){
+	if(+breakTime.value > 20 || +breakTime.value < 1){
+		breakTime.value = 5;
+		secToDisplay(5 * 60);
+	}else{
+		secToDisplay(+breakTime.value * 60)
+	}
 }
