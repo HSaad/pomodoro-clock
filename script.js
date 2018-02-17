@@ -14,9 +14,10 @@ let time = new Date();
 play.addEventListener('click', (e) =>{
 	//console.log(sessionTime.value);
 	if(isPaused == true){
+		time = new Date();
 		isPaused = false;
 	}
-	startTimer(sessionTime.value);
+	startTimer(displayToSec());
 });
 
 stop.addEventListener('click', (e) => {
@@ -27,26 +28,19 @@ pause.addEventListener('click', (e) =>{
 	pauseTimer();
 });
 
+//FUNCTION
+
 function startTimer(duration) {
 	let offset = 0
 	setInterval(function(){
 		if(!isPaused){
 			let milisec = offset + (new Date()).getTime() - time.getTime();
-			display.textContent = duration - parseInt(milisec / 1000) 
+			secToDisplay(duration - parseInt(milisec / 1000));
 
-
+			if(displayToSec() < 0){
+				secToDisplay(duration);
+			}
 		}
-		//minutes = parseInt(timer, 10)
-		//seconds = parseInt(minutes % 60, 10)
-
-		//minutes = minutes < 10 ? "0" + minutes : minutes;
-		//seconds = seconds < 10 ? "0" + seconds : seconds;
-
-		//display.textContent = minutes + ":" + seconds;
-
-		//if(--timer < 0){
-		//	timer = duration; //restarts timer
-		//}
 	}, 10);
 }
 
@@ -62,4 +56,25 @@ function pauseTimer(){
 //switches between session timer and break timer
 function switchSession(){
 
+}
+
+//turn display time to total seconds in int
+function displayToSec(){
+	let time = (display.textContent).split(":");
+	let minutes = parseInt(time[0]);
+	let seconds = parseInt(time[1]);
+
+	let totalSeconds = minutes * 60 + seconds;
+	return totalSeconds;
+}
+
+//turn total number of seconds into display time
+function secToDisplay(totalSeconds){
+	let minutes = Math.floor(totalSeconds / 60);
+	let seconds = totalSeconds % 60;
+
+	minutes = minutes < 10 ? "0" + minutes : minutes;
+	seconds = seconds < 10 ? "0" + seconds : seconds;
+
+	display.textContent = minutes + ":" + seconds;
 }
