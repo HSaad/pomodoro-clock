@@ -10,14 +10,15 @@ const display = document.querySelector('.time');
 
 let isPaused = false;
 let time = new Date();
+let isPlayClicked = false;
 
 play.addEventListener('click', (e) =>{
-	//console.log(sessionTime.value);
-	if(isPaused == true){
-		time = new Date();
-		isPaused = false;
+	e.preventDefault();
+
+	if (isPlayClicked === false){
+		startTimer(displayToSec());
 	}
-	startTimer(displayToSec());
+	isPlayClicked = true;
 });
 
 stop.addEventListener('click', (e) => {
@@ -25,32 +26,49 @@ stop.addEventListener('click', (e) => {
 });
 
 pause.addEventListener('click', (e) =>{
+	e.preventDefault();
 	pauseTimer();
+});
+
+reset.addEventListener('click', (e) =>{
+	resetTimer();
 });
 
 //FUNCTION
 
 function startTimer(duration) {
-	let offset = 0
+	let offset = 0;
+	time = new Date();
+	isPaused = false;
+
 	setInterval(function(){
 		if(!isPaused){
 			let milisec = offset + (new Date()).getTime() - time.getTime();
 			secToDisplay(duration - parseInt(milisec / 1000));
 
-			if(displayToSec() < 0){
-				secToDisplay(duration);
-			}
+			//if(displayToSec() < 0){
+				//secToDisplay(duration);
+			//}
 		}
 	}, 10);
 }
 
 function stopTimer(){
 	//clearInterval(startTimer);
-	display.textContent = sessionTime.value;
+	isPaused = true;
+	isPlayClicked = false;
+	secToDisplay(+sessionTime.value * 60); //should be session or breaktime 
 }
 
 function pauseTimer(){
 	isPaused = true;
+	isPlayClicked = false;
+}
+
+function resetTimer(){
+	isPaused = true;
+	isPlayClicked = false;
+	secToDisplay(+sessionTime.value * 60); //resets timer to session
 }
 
 //switches between session timer and break timer
