@@ -9,7 +9,7 @@ h1 {
 	color: white;
 	font-size: 50px;
 	margin-top: 100px;
-	margin-bottom: 20px;
+	margin-bottom: 25px;
 }
 
 h2, div, input{
@@ -17,7 +17,12 @@ h2, div, input{
 }
 
 h2{
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 20px;
 	display: inline-block;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	margin-left: 30px;
 	margin-right: 50px;
 }
@@ -43,6 +48,7 @@ h2{
 .time{
 	font-family: Helvetica, Arial,sans-serif;
 	font-size: 80px;
+	margin-bottom: 10px;
 }
 
 .settings{
@@ -57,9 +63,10 @@ h2{
 }
 
 input{
-	width: 150px;
-	height: 30px;
+	width: 140px;
+	height: 27px;
 	margin-right: 10px;
+	margin-bottom: 13px;
 	font-size: 20px;
 	border-style: none;
 }
